@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WeatherDetailsActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/TV_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textSize="24sp"
+            tools:text="Kazan" />
+
+        <TextView
+            android:id="@+id/TV_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/TV_city"
+            android:textSize="24sp"
+            tools:text="Russia" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/TV_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="32dp"
+        android:textSize="32dp"
+        tools:text="-228" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TV_temperature"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/TV_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="pressure 192" />
+
+        <TextView
+            android:id="@+id/TV_humidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TV_pressure"
+            tools:text="humidity very wet" />
+
+        <TextView
+            android:id="@+id/TV_windDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TV_humidity"
+            tools:text="vladimirskiy sentral" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
