@@ -28,19 +28,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), ItemCallback {
 
-    internal var API_BASE_URL = "https://api.openweathermap.org/"
     private lateinit var retrofit: Retrofit
-    private lateinit var locationManager: LocationManager
     private lateinit var retrofitService: RetrofitService
     private lateinit var recyclerAdapter: RecyclerAdapter
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val apiKey: String = "841c58e8f74b39ca6228f4b81ab58ed1"
-    private var longtitude: Double = 49.0
-    private var lattitude: Double = 55.8
-
+    private var longtitude: Double = baseLongtitude
+    private var lattitude: Double = baseLattitude
 
     companion object {
         var cities: List<CitiesArray.City>? = null
+        const val API_BASE_URL = "https://api.openweathermap.org/"
+        const val apiKey: String = "841c58e8f74b39ca6228f4b81ab58ed1"
+        const val baseLongtitude: Double = 49.0
+        const val baseLattitude: Double = 55.8
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +62,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
                 .baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-
         retrofitService = retrofit.create(RetrofitService::class.java)
-
 
         recyclerAdapter = RecyclerAdapter(CitiesDiffCallBack(), this)
         val manager = LinearLayoutManager(this)
@@ -76,15 +74,15 @@ class MainActivity : AppCompatActivity(), ItemCallback {
     override fun onItemClick(position: Int) {
         val intent = Intent(this, WeatherDetailsActivity::class.java)
         intent.putExtra("city", cities?.get(position)?.name)
-        intent.putExtra("country", cities?.get(position)?.sys!!.country)
-        intent.putExtra("temperature", cities?.get(position)?.main?.temp?.let { Math.round(it-273.15).toString() })
-        intent.putExtra("pressure", "pressure: " + cities?.get(position)?.main?.pressure)
-        intent.putExtra("humidity", "humidity: " + cities?.get(position)?.main?.humidity)
-        intent.putExtra("windDirection", "wind direction: " + cities?.get(position)?.wind?.deg)
+        intent.putExtra("country", cities?.get(position)?.sys?.country)
+        intent.putExtra("temperature", cities?.get(position)?.main?.temp?.let { Math.round(it - 273.15) })
+        intent.putExtra("pressure",  cities?.get(position)?.main?.pressure)
+        intent.putExtra("humidity",  cities?.get(position)?.main?.humidity)
+        intent.putExtra("windDirection",  cities?.get(position)?.wind?.deg)
         startActivity(intent)
     }
 
-    fun getData(){
+    fun getData() {
         retrofitService.getData(lattitude, longtitude, 20, apiKey).enqueue(object : Callback<CitiesArray> {
             override fun onResponse(call: Call<CitiesArray>?, response: Response<CitiesArray>) {
                 cities = response.body()?.list
@@ -114,7 +112,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        var allowed = false;
+        var allowed = false
         when (requestCode) {
             123 -> allowed = grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
         }

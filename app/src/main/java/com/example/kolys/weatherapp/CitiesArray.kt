@@ -2,19 +2,16 @@ package com.example.kehtolaulu.simpleweather
 
 import com.google.gson.annotations.SerializedName
 
-  class CitiesArray {
-    @SerializedName("list")
-    internal var list: List<City>? = null
-
-    inner class City {
+data class CitiesArray(var list: List<City>? = null) {
+    data class City (
         @SerializedName("name")
-        var name: String? = null
+        var name: String? = null,
         @SerializedName("sys")
-        var sys: Sys? = null
+        var sys: Sys? = null,
         @SerializedName("main")
-        var main: City.WeatherTemp? = null
+        var main: City.WeatherTemp? = null,
         @SerializedName("wind")
-        var wind: City.Wind? = null
+        var wind: City.Wind? = null) {
 
         inner class Sys {
             var country: String? = null
@@ -33,9 +30,3 @@ import com.google.gson.annotations.SerializedName
         }
     }
 }
-
-
-
-
-
-

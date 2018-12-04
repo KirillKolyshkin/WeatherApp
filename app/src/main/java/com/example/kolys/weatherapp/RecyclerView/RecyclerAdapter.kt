@@ -14,7 +14,13 @@ import kotlinx.android.synthetic.main.city_item.view.*
 
 open class RecyclerAdapter(diffCallback: DiffUtil.ItemCallback<CitiesArray.City>, private var callbackItem: ItemCallback) : ListAdapter<CitiesArray.City, RecyclerAdapter.MyViewHolder>(diffCallback){
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        fun bindViews(city: CitiesArray.City){
+            itemView.tv_city_item.text = city.name
+            itemView.tv_country_item.text = city.sys?.country
+            itemView.tv_temperature_item.text = city.main?.temp?.let { Math.round(it-273.15).toString()}
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.MyViewHolder {
         val v = LayoutInflater.from(parent.context)
@@ -23,9 +29,7 @@ open class RecyclerAdapter(diffCallback: DiffUtil.ItemCallback<CitiesArray.City>
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.itemView.TV_city_item.text = getItem(position).name
-        holder.itemView.TV_country_item.text = getItem(position).sys?.country
-        holder.itemView.TV_temperature_item.text = getItem(position).main?.temp?.let { Math.round(it-273.15).toString()}
+        holder.bindViews(getItem(position))
         holder.itemView.setOnClickListener { callbackItem.onItemClick(position) }
     }
 

@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true">
 
         <TextView
-            android:id="@+id/TV_city"
+            android:id="@+id/tv_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -20,16 +20,16 @@
             tools:text="Kazan" />
 
         <TextView
-            android:id="@+id/TV_country"
+            android:id="@+id/tv_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/TV_city"
+            android:layout_toEndOf="@+id/tv_city"
             android:textSize="24sp"
             tools:text="Russia" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/TV_temperature"
+        android:id="@+id/tv_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -41,29 +41,27 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/TV_temperature"
+        android:layout_below="@+id/tv_temperature"
         android:layout_centerHorizontal="true">
 
         <TextView
-            android:id="@+id/TV_pressure"
+            android:id="@+id/tv_pressure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="pressure 192" />
 
         <TextView
-            android:id="@+id/TV_humidity"
+            android:id="@+id/tv_humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/TV_pressure"
+            android:layout_below="@+id/tv_pressure"
             tools:text="humidity very wet" />
 
         <TextView
-            android:id="@+id/TV_windDirection"
+            android:id="@+id/tv_windDirection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/TV_humidity"
+            android:layout_below="@+id/tv_humidity"
             tools:text="vladimirskiy sentral" />
     </RelativeLayout>
-
-
 </RelativeLayout>
