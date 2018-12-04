@@ -1,15 +1,24 @@
 package com.example.kolys.weatherapp
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.Toast
-
 import com.example.kehtolaulu.simpleweather.CitiesArray
 import com.example.kolys.weatherapp.RecyclerView.RecyclerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,9 +30,14 @@ class MainActivity : AppCompatActivity(), ItemCallback {
 
     internal var API_BASE_URL = "https://api.openweathermap.org/"
     private lateinit var retrofit: Retrofit
-    //private lateinit var locationManager: LocationManager
+    private lateinit var locationManager: LocationManager
     private lateinit var retrofitService: RetrofitService
     private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val apiKey: String = "841c58e8f74b39ca6228f4b81ab58ed1"
+    private var longtitude: Double = 49.0
+    private var lattitude: Double = 55.8
+
 
     companion object {
         var cities: List<CitiesArray.City>? = null
@@ -32,15 +46,17 @@ class MainActivity : AppCompatActivity(), ItemCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        /*locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if (ContextCompat.checkSelfPermission(
                         this,
                         Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
         ) {
             Toast.makeText(this, "not granted", Toast.LENGTH_SHORT).show()
+            requestPermissionWithRationale()
         } else {
-        }*/
+            getCitiesWithGeo()
+        }
 
         retrofit = Retrofit.Builder()
                 .baseUrl(API_BASE_URL)
@@ -54,18 +70,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
         val manager = LinearLayoutManager(this)
         recycler_view.adapter = recyclerAdapter
         recycler_view.layoutManager = manager
-
-        retrofitService.getData().enqueue(object : Callback<CitiesArray> {
-            override fun onResponse(call: Call<CitiesArray>?, response: Response<CitiesArray>) {
-                cities = response.body()?.list
-                recyclerAdapter.submitList(cities)
-            }
-
-            override fun onFailure(call: Call<CitiesArray>?, t: Throwable?) {
-                Log.i("", t.toString())
-                Toast.makeText(this@MainActivity, "An error occurred during networking", Toast.LENGTH_SHORT).show()
-            }
-        })
+        getData()
     }
 
     override fun onItemClick(position: Int) {
@@ -77,5 +82,57 @@ class MainActivity : AppCompatActivity(), ItemCallback {
         intent.putExtra("humidity", "humidity: " + cities?.get(position)?.main?.humidity)
         intent.putExtra("windDirection", "wind direction: " + cities?.get(position)?.wind?.deg)
         startActivity(intent)
+    }
+
+    fun getData(){
+        retrofitService.getData(lattitude, longtitude, 20, apiKey).enqueue(object : Callback<CitiesArray> {
+            override fun onResponse(call: Call<CitiesArray>?, response: Response<CitiesArray>) {
+                cities = response.body()?.list
+                recyclerAdapter.submitList(cities)
+            }
+
+            override fun onFailure(call: Call<CitiesArray>?, t: Throwable?) {
+                Log.i("", t.toString())
+                Toast.makeText(this@MainActivity, "Something go wrong", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun requestPermissionWithRationale() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Toast.makeText(this@MainActivity, "Allow", Toast.LENGTH_SHORT).show()
+        } else {
+            requestPerms()
+        }
+    }
+
+    private fun requestPerms() {
+        val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(permissions, 123)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        var allowed = false;
+        when (requestCode) {
+            123 -> allowed = grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        }
+        if (allowed) getCitiesWithGeo()
+    }
+
+    @SuppressLint("MissingPermission")
+    fun getCitiesWithGeo() {
+        fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        lattitude = location.latitude
+                        longtitude = location.longitude
+                        getData()
+                        Toast.makeText(this, "Cities by your location", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Sory, smth go wrong, now you in Kazan", Toast.LENGTH_LONG).show()
+                    }
+                }
     }
 }
