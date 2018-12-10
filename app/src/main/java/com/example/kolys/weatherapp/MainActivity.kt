@@ -2,6 +2,7 @@ package com.example.kolys.weatherapp
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.arch.persistence.room.Room
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var longtitude: Double = baseLongtitude
     private var lattitude: Double = baseLattitude
+    private lateinit var dataBase : Database
 
     companion object {
         var cities: List<CitiesArray.City>? = null
@@ -46,6 +48,10 @@ class MainActivity : AppCompatActivity(), ItemCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dataBase = Room
+                .databaseBuilder(this.applicationContext,Database::class.java, "sometext")
+                .allowMainThreadQueries()
+                .build()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if (ContextCompat.checkSelfPermission(
                         this,
@@ -85,6 +91,8 @@ class MainActivity : AppCompatActivity(), ItemCallback {
     fun getData() {
         retrofitService.getData(lattitude, longtitude, 20, apiKey).enqueue(object : Callback<CitiesArray> {
             override fun onResponse(call: Call<CitiesArray>?, response: Response<CitiesArray>) {
+                dataBase.dataDao().dropData()
+                response.body()?.list?.let { dataBase.dataDao().insertData(it) }
                 cities = response.body()?.list
                 recyclerAdapter.submitList(cities)
             }
@@ -92,6 +100,8 @@ class MainActivity : AppCompatActivity(), ItemCallback {
             override fun onFailure(call: Call<CitiesArray>?, t: Throwable?) {
                 Log.i("", t.toString())
                 Toast.makeText(this@MainActivity, "Something go wrong", Toast.LENGTH_SHORT).show()
+                cities = dataBase.dataDao().getData()
+                recyclerAdapter.submitList(cities)
             }
         })
     }
