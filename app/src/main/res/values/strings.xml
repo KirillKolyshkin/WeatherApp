@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="temperature">temperature</string>
+    <string name="pressure">pressure</string>
+    <string name="humidity">humidity</string>
+    <string name="windDirection">windDirection</string>
+    <string name="exeption">Sory, smth go wrong, now you in Kazan</string>
+    <string name="success">Cities by your location</string>
+    <string name="allow">allow</string>
+    <string name="smthWrong">Something go wrong</string>
+    <string name="notGranted">not granted</string>
 </resources>

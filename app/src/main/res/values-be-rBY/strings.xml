@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">дадатак надвор\'е</string>
+    <string name="temperature">тэмпература</string>
+    <string name="pressure">"ціск "</string>
+    <string name="humidity">вільготнасць</string>
+    <string name="windDirection">напрамак ветру</string>
+    <string name="exeption">прабачце, што нешта пайшло не так, зараз вы ў Казані</string>
+    <string name="success">горада вызначаны па лакацыі</string>
+    <string name="allow">дазволена</string>
+    <string name="smthWrong">што нешта пайшло не так</string>
+    <string name="notGranted">забаронена</string>
+</resources>

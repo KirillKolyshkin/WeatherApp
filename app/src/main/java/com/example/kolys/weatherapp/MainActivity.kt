@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
                         Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(this, "not granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, resources.getString(R.string.notGranted), Toast.LENGTH_SHORT).show()
             requestPermissionWithRationale()
         } else {
             getCitiesWithGeo()
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
         startActivity(intent)
     }
 
-    fun getData() {
+    private fun getData() {
         retrofitService.getData(lattitude, longtitude, 20, apiKey).enqueue(object : Callback<CitiesArray> {
             override fun onResponse(call: Call<CitiesArray>?, response: Response<CitiesArray>) {
                 dataBase.dataDao().dropData()
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
 
             override fun onFailure(call: Call<CitiesArray>?, t: Throwable?) {
                 Log.i("", t.toString())
-                Toast.makeText(this@MainActivity, "Something go wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, resources.getString(R.string.smthWrong), Toast.LENGTH_SHORT).show()
                 cities = dataBase.dataDao().getData()
                 recyclerAdapter.submitList(cities)
             }
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(), ItemCallback {
 
     fun requestPermissionWithRationale() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Toast.makeText(this@MainActivity, "Allow", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, resources.getString(R.string.allow), Toast.LENGTH_SHORT).show()
         } else {
             requestPerms()
         }
@@ -137,9 +137,9 @@ class MainActivity : AppCompatActivity(), ItemCallback {
                         lattitude = location.latitude
                         longtitude = location.longitude
                         getData()
-                        Toast.makeText(this, "Cities by your location", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, resources.getString(R.string.success), Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this, "Sory, smth go wrong, now you in Kazan", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, resources.getString(R.string.exeption), Toast.LENGTH_LONG).show()
                     }
                 }
     }

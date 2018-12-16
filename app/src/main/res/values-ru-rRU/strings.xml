@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ПогодаПриложение</string>
+    <string name="temperature">температура</string>
+    <string name="pressure">давление</string>
+    <string name="humidity">влажность</string>
+    <string name="windDirection">направление ветра</string>
+    <string name="exeption">прости братан, что то идёт не по плану, теперь ты в Казани</string>
+    <string name="success">города определены по локации</string>
+    <string name="allow">дозволенно</string>
+    <string name="smthWrong">упс, у нас проблемы</string>
+    <string name="notGranted">запрещено</string>
+</resources>
